@@ -10,12 +10,15 @@ import { s3Upload } from "../libs/awsLib";
 
 export default function Notes() {
   const file = useRef(null);
-const { id } = useParams();
-const history = useHistory();
-const [note, setNote] = useState(null);
-const [content, setContent] = useState("");
-const [isLoading, setIsLoading] = useState(false);
-const [isDeleting, setIsDeleting] = useState(false);
+  const { id } = useParams();
+  const history = useHistory();
+  const [note, setNote] = useState(null);
+  const [content, setContent] = useState("");
+  const [recipient, setRecipient] = useState("");
+  const [subject, setSubject] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isEmailing, setIsEmailing] = useState(false);
 
   useEffect(() => {
     function loadNote() {
@@ -45,6 +48,14 @@ const [isDeleting, setIsDeleting] = useState(false);
     return content.length > 0;
   }
   
+  function validateRecipient() {
+    return recipient.length > 0 && recipient.includes('@');
+  }
+
+  function validateSubject() {
+    return subject.length > 0;
+  }
+
   function formatFilename(str) {
     return str.replace(/^\w+-/, "");
   }
@@ -114,6 +125,22 @@ const [isDeleting, setIsDeleting] = useState(false);
       setIsDeleting(false);
     }
   }
+
+  async function handleEmail(event) {
+    event.preventDefault();
+    setIsEmailing(true);
+    try {
+      await emailNote();
+    } catch(e) {
+      onError(e);
+    }
+    setIsEmailing(false);
+  }
+
+  function emailNote() {
+    let rawAttachmentURL = note.attachmentURL.split(note.attachment)[0] + note.attachment;
+    return API.post("notes", `/send/${id}`, {body: {recipient, subject, attachmentURL: rawAttachmentURL}});
+  }
   
   return (
     <div className="Notes">
@@ -154,6 +181,32 @@ const [isDeleting, setIsDeleting] = useState(false);
           >
             Save
           </LoaderButton>
+          <FormGroup>
+            <ControlLabel>Recipient Email: </ControlLabel>
+            <FormControl
+              type="text"
+              value={recipient}
+              onChange={e => setRecipient(e.target.value)}
+              placeholder="user@example.com"
+            />
+            <ControlLabel>Subject: </ControlLabel>
+            <FormControl
+              type="text"
+              value={subject}
+              onChange={e => setSubject(e.target.value)}
+              placeholder="My note"
+            />
+            <LoaderButton
+              block
+              bsSize="large"
+              bsStyle="primary"
+              isLoading={isEmailing}
+              onClick={handleEmail}
+              disabled={!validateForm() || !validateRecipient() || !validateSubject()}
+            >
+              Email
+            </LoaderButton>
+          </FormGroup>
           <LoaderButton
             block
             bsSize="large"

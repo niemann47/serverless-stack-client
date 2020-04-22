@@ -1,0 +1,10 @@
+@media all and (min-width: 480px) {
+    .SMTP {
+      padding: 60px 0;
+    }
+  
+    .SMTP form {
+      margin: 0 auto;
+      max-width: 480px;
+    }
+  }

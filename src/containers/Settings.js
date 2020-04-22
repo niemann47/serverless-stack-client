@@ -4,13 +4,16 @@ import { API } from "aws-amplify";
 import { onError } from "../libs/errorLib";
 import config from "../config";
 import { Elements, StripeProvider } from "react-stripe-elements";
+import { FormGroup } from "react-bootstrap";
 import BillingForm from "../components/BillingForm";
+import SMTP from "../components/SMTP";
 import "./Settings.css";
 
 
 export default function Settings() {
   const history = useHistory();
   const [isLoading, setIsLoading] = useState(false);
+  const [isSMTPLoading, setIsSMTPLoading] = useState(false);
   const [stripe, setStripe] = useState(null);
 
   useEffect(() => {
@@ -44,14 +47,39 @@ export default function Settings() {
       setIsLoading(false);
     }
   }
+
+  function saveSMTP(smtp) {
+    return API.put("notes", "/smtp", {body: smtp});
+  }
+
+  async function handleSaveSMTP(smtp) {
+    setIsSMTPLoading(true);
+
+    try {
+      await saveSMTP(smtp)
+
+      alert("SMTP Saved!!");
+      history.push("/");
+    } catch(e) {
+      onError(e);
+      setIsSMTPLoading(false);
+    }
+  }
   
   return (
     <div className="Settings">
-      <StripeProvider stripe={stripe}>
-        <Elements>
-          <BillingForm isLoading={isLoading} onSubmit={handleFormSubmit} />
-        </Elements>
-      </StripeProvider>
+      <div className="card">
+        <StripeProvider stripe={stripe}>
+          <Elements>
+            <BillingForm isLoading={isLoading} onSubmit={handleFormSubmit} />
+          </Elements>
+        </StripeProvider>
+      </div>
+      <div className="smtp">
+        <FormGroup bsSize="large" controlId="smtp">
+          <SMTP isLoading={isSMTPLoading} onSubmit={handleSaveSMTP} />
+        </FormGroup>
+      </div>
     </div>
   );
 }
