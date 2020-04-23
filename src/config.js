@@ -6,7 +6,7 @@ const dev = {
   },
   apiGateway: {
     REGION: "us-east-2",
-    URL: "https://zzaapmk53d.execute-api.us-east-2.amazonaws.com/dev"
+    URL: "https://api.ohwhatfun.org/dev"
   },
   cognito: {
     REGION: "us-east-2",
@@ -24,7 +24,7 @@ const prod = {
   },
   apiGateway: {
     REGION: "us-east-2",
-    URL: "https://0puvqdd6sf.execute-api.us-east-2.amazonaws.com/prod"
+    URL: "https://api.ohwhatfun.org/prod"
   },
   cognito: {
     REGION: "us-east-2",
