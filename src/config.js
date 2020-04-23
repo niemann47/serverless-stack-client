@@ -20,16 +20,16 @@ const prod = {
   STRIPE_KEY: "pk_test_ys9GkwgbvCgRKIHvDtIiz8LR007gkeGDsS",
   s3: {
     REGION: "us-east-2",
-    BUCKET: "notes-app-2-api-dev-attachmentsbucket-rrorqiu5n7fs"
+    BUCKET: "notes-app-2-api-prod-attachmentsbucket-1hjvmy3wiqtsq"
   },
   apiGateway: {
     REGION: "us-east-2",
-    URL: "https://zzaapmk53d.execute-api.us-east-2.amazonaws.com/dev"
+    URL: "https://0puvqdd6sf.execute-api.us-east-2.amazonaws.com/prod"
   },
   cognito: {
     REGION: "us-east-2",
-    USER_POOL_ID: "us-east-2_qBh0LWlMX",
-    APP_CLIENT_ID: "3veeugm6i47vt4ctstiqlkd73g",
+    USER_POOL_ID: "us-east-2_Y6n01xbfF",
+    APP_CLIENT_ID: "1b7rgd8lqsa91v5p1f0m21a2pn",
     IDENTITY_POOL_ID: "us-east-2:6495cd98-3973-4564-bab8-8f667930d92e"
   }
 };
